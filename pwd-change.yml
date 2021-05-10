@@ -1,9 +1,22 @@
 ---
 - hosts: all
   become: yes
+  gather_facts : no
+
   tasks:
+    - name: check target user existence
+      getent:
+        key: "{{ user }}"
+        database: passwd
+
     - name: Change user password
       user:
         name: "{{ user }}"
         update_password: always
         password: "{{ newpassword|password_hash('sha512') }}"
+      notify: force change password 
+
+  handlers:
+    - name: force change password
+      command: "chage -d 0 {{ user }}"
+#      when: always
