@@ -1,0 +1,40 @@
+---
+- name: "PLAY - Create Contrail networks"
+  hosts: localhost
+  gather_facts: no
+  vars:
+    environment_vars_path: "env_vars"
+    tenant_vars_path: "tenants_vars"
+    openstack_config_file: "{{ lookup('env', 'OS_CLIENT_CONFIG_FILE') }}" # Check from bastion server
+  pre_tasks:
+    - name: "Pre-check - we have openstack credentials"
+      assert:
+        that:
+          - lookup('env','OS_PROJECT_NAME') is defined and lookup('env','OS_PROJECT_NAME') != ""
+          - lookup('env','OS_PASSWORD') is defined and lookup('env','OS_PASSWORD') != ""
+          - lookup('env','OS_AUTH_URL') is defined and lookup('env','OS_AUTH_URL') != ""
+          - lookup('env','OS_USERNAME') is defined and lookup('env','OS_USERNAME') != ""
+        fail_msg: "Please source OpenStack RC file before executing the playbook"
+
+    - name: "site.yml | Pre-check - we have tenant/env variables"
+      assert:
+        that:
+          - this_env is defined
+          - this_tenant is defined
+        fail_msg: "Please input tenant/env required extra variables"
+
+    - name: "Include - general environment vars for '{{ this_env }}'"
+      include_vars: "{{ environment_vars_path }}/env-vars_{{ this_env }}.yml"
+
+    - name: "Include - tenant project-level vars for '{{ this_env }}'"
+      include_vars: "{{ tenant_vars_path }}/{{ this_tenant }}/tenant-project-config_{{ this_env }}.yml"
+
+    - name: "Include - tenant network-level vars for '{{ this_env }}'"
+      include_vars: "{{ tenant_vars_path }}/{{ this_tenant }}/tenant-network-config_{{ this_env }}.yml"
+
+    - name: "debug - Show my project name"
+      debug:
+        msg: "Creating networks in Tenant/Project: '{{ project.name }}'"
+
+  roles:
+    - Automation-role-create_networks

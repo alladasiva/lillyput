@@ -1,0 +1,10 @@
+---
+- name: "PLAY - Create Contrail networks"
+  hosts: all
+  gather_facts: no
+  vars:
+    environment_vars_path: "env_vars"
+
+  roles:
+    - <rolename>
+
