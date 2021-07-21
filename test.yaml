@@ -1,0 +1,3 @@
+persistence_profile: BSS-GSLB-JSESSIONID 
+preprod: 
+     active_active : true

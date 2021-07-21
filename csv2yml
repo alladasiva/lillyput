@@ -1,0 +1,26 @@
+ctr = 0
+csv_filename = 'test.csv'
+yaml_filename = csv_filename.replace('csv', 'yaml')
+ctrlr = {}
+
+with open(csv_filename, "r") as csv:
+	for line in csv:
+		if ctr == 0:
+			ctr+=1		#Skip the column header
+		else:
+			#save the csv as dictionary
+			ctrl,active_active,algorithm,gslb_tenant,hostname,persistence,sheet_name,vs_name1,vs_name2 = line.replace(' ','').strip().split(',')
+			ctrlr[ctrl] = {'active_active': active_active, 'algorithm': algorithm, 'gslb_tenant': gslb_tenant, 'hostname': hostname, 'persistence': persistence, 'sheet_name': sheet_name, 'vs_name1': vs_name1, 'vs_name2': vs_name2}
+			
+with open(yaml_filename, "w+") as yf :
+	yf.write("persistence_profile: BSS-GSLB-JSESSIONID \n")
+	for u in ctrlr:
+		yf.write(f"{u}: \n")
+		step=0
+		for k,v in ctrlr[u].items ():
+			if step==0:
+				yf.write(f"     {k} : {v}\n")
+				step+=1
+			else:
+				yf.update(f"     {k} : {v}\n")
+			

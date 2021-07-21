@@ -1,0 +1,4 @@
+ctrl,active_active,algorithm,gslb_tenant,hostname,persistence,sheet_name,vs_name1,vs_name2
+preprod,true,GSLB_ALGORITHM_ROUND_ROBIN,BSS_PreProd_GSLB,bss-kb-pre,true,BSS_PreProd,kb-pre,kb-pre
+preprod,true,GSLB_ALGORITHM_ROUND_ROBIN,BSS_PreProd_GSLB,bss-kbdb-pre,true,BSS_PreProd,kbdb-pre,kbdb-pre
+prod,true,GSLB_ALGORITHM_ROUND_ROBIN,BSS_Prod_GSLB,bss-kbdb-prb,true,BSS_Prod,kbdb-prd,kbdb-prd
